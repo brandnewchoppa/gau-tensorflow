@@ -280,7 +280,7 @@ class Transformer(Model):
                  depth : int = 4,
                  qk_dim : int = 64,
                  expansion_factor : int = 2,
-                 dropout : float = .2,
+                 dropout_rate : float = .2,
                  norm_type : str = 'scale_norm',
                  shift_tokens : bool = True,
                  **kwargs):
@@ -294,7 +294,7 @@ class Transformer(Model):
             GAU(
                 qk_dim = qk_dim,
                 expansion_factor = expansion_factor,
-                dropout = dropout,
+                dropout_rate = dropout_rate,
                 norm_type = norm_type,
                 shift_tokens = shift_tokens
             ) for _ in range(depth)])
