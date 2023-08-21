@@ -220,10 +220,11 @@ class GAU(Layer):
         self.built = True
 
     def _attn(self, x, v):
+        n = cast(x.shape[-2], 'float32')
         z = self.to_qk(x)
         q, k = self.scale_offset(z)
         qk = einsum('bns, bms -> bnm', q, k)
-        a = tf.nn.relu(qk + self.rel_pos_bias(qk)) ** 2
+        a = tf.nn.relu(qk / n + self.rel_pos_bias(qk)) ** 2
         return einsum('bnm, bme -> bne', a, v)
 
     def _shift_tokens(self, x):
@@ -238,7 +239,7 @@ class GAU(Layer):
             x = self._shift_tokens(x)
 
         u, v = tf.split(self.to_uv(x), 2, axis = -1)
-        x = u * self._attn(x, v)
+        x = u * self.dropout(self._attn(x, v))
         return self.to_out(x) + shortcut
     
 class ScaledSin(Layer):
