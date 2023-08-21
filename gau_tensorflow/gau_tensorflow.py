@@ -86,12 +86,12 @@ class OffsetScale(Layer):
 
         self.gamma = self.add_weight(
             name = 'gamma',
-            shape = (self.n_heads, e),
+            shape = (self.splits, e),
             initializer = ones())
 
         self.beta = self.add_weight(
             name = 'beta',
-            shape = (self.n_heads, e),
+            shape = (self.splits, e),
             initializer = zeros())
 
         self.built = True
@@ -204,7 +204,7 @@ class GAU(Layer):
             activation = 'silu')
 
         self.scale_offset = OffsetScale(
-            spltis = 2)
+            splits = 2)
 
         self.rel_pos_bias = RelativePositionBias(
             scale = e ** .5)
