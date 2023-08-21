@@ -183,7 +183,7 @@ class GAU(Layer):
         super(GAU, self).__init__(**kwargs)
         self.qk_dim = qk_dim
         self.expansion_factor = expansion_factor
-        self.dropout = dropout
+        self.dropout_rate = dropout_rate
         self.norm_type = norm_type
         self.shift_tokens = shift_tokens
 
