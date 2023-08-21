@@ -176,7 +176,7 @@ class GAU(Layer):
                  *,
                  qk_dim : int = 64,
                  expansion_factor : int = 2,
-                 dropout : float = .2,
+                 dropout_rate : float = .2,
                  norm_type : str = 'scale_norm',
                  shift_tokens : bool = True,
                  **kwargs):
@@ -210,11 +210,11 @@ class GAU(Layer):
             scale = e ** .5)
 
         self.dropout = Dropout(
-            rate = self.dropout)
+            rate = self.dropout_rate)
 
         self.to_out = Sequential([
             Dense(e),
-            Dropout(rate = self.dropout)
+            Dropout(rate = self.dropout_rate)
         ])
 
         self.built = True
