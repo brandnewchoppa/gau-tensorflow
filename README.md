@@ -3,7 +3,7 @@ Gated Attention Unit (TensorFlow implementation)
 
 Presented from the paper [Transformer Quality in Linear Time](https://arxiv.org/pdf/2202.10447.pdf)
 
-# Roadmap
+## Roadmap
 - [x] GAU module, Transformer Model
 - [ ] AutoregressiveWrapper
 - [ ] Rotary Embeddings
