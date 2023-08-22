@@ -23,3 +23,13 @@ Presented from the paper [Transformer Quality in Linear Time](https://arxiv.org/
     volume  = {abs/2202.10447}
 }
 ```
+
+```bibtex
+@article{Toan2019TransformerwT,
+    title   = {Transformers without Tears: Improving the Normalization of Self-Attention},
+    author  = {Toan Q. Nguyen and Julian Salazar},
+    journal = {ArXiv},
+    year    = {2019},
+    volume  = {abs/2019.05895}
+}
+```
