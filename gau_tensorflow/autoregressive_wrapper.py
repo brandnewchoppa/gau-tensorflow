@@ -59,7 +59,7 @@ class AutoregressiveWrapper(Model):
             out = out.write(idx, token[tf.newaxis])
 
         size = tf.size(input_tokens)
-        for i in tf.range(size, size + max_new_tokens):
+        for i in tf.range(size, size + max_new_tokens - 1):
 
             if i + 1 == max_tokens:
                 break
