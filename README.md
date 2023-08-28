@@ -3,7 +3,8 @@ Gated Attention Unit (TensorFlow implementation) from the paper [Transformer Qua
 
 ## Roadmap
 - [x] GAU module, Transformer Model
-- [ ] AutoregressiveWrapper (top_p, top_k, maybe top_a and rep penalty)
+- [x] AutoregressiveWrapper (top_p, top_k)
+- [ ] Extend the wrapper with (top_a and rep penalty)
 - [ ] Rotary Embeddings
 - [ ] ScaleNorm + FixNorm experiment from the [paper](https://arxiv.org/pdf/1910.05895.pdf)
 
