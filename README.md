@@ -19,11 +19,11 @@ from gau_tensorflow import Transformer
 
 model = Transformer(
     dim = 128,            # embedding dimension
-    n_tokens = 50256     # number of tokens used in the vocabulary
+    n_tokens = 50256      # number of tokens used in the vocabulary
 )
 
-x = tf.random.normal([1, 512, 128])
-%time model(x, training = False)
+x = tf.random.uniform([1, 512], 0, 50256, 'int64')
+logits = model(x, training = False)
 ```
 
 ## Citations
