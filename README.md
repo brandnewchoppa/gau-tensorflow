@@ -11,6 +11,21 @@ Gated Attention Unit (TensorFlow implementation) from the paper [Transformer Qua
 > [!WARNING]
 > This repository is under developemnt, but please feel free to explore and provide any feedback or suggestions you may have. :construction:
 
+## Usage
+
+```python
+import tensorflow as tf
+from gau_tensorflow import Transformer
+
+model = Transformer(
+    dim = 128,            # embedding dimension
+    n_tokens = 50256     # number of tokens used in the vocabulary
+)
+
+x = tf.random.normal([1, 512, 128])
+%time model(x, training = False)
+```
+
 ## Citations
 
 ```bibtex
