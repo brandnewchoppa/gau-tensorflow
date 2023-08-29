@@ -224,7 +224,11 @@ class GAU(Layer):
         z = self.to_qk(x)
         q, k = self.scale_offset(z)
         qk = einsum('bns, bms -> bnm', q, k)
+        
         a = tf.nn.relu(qk / n + self.rel_pos_bias(qk)) ** 2
+        mask = tf.cast(tf.linalg.band_part(tf.ones([n, n]), -1, 0), 'bool')
+        a = tf.where(mask, a, -1e10)
+        
         return einsum('bnm, bme -> bne', a, v)
 
     def _shift_tokens(self, x):
