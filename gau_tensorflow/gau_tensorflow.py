@@ -178,7 +178,7 @@ class GAU(Layer):
                  expansion_factor : int = 2,
                  dropout_rate : float = .2,
                  norm_type : str = 'scale_norm',
-                 shift_tokens : bool = True,
+                 shift_tokens : bool = False,
                  **kwargs):
         super(GAU, self).__init__(**kwargs)
         self.qk_dim = qk_dim
@@ -287,7 +287,7 @@ class Transformer(Model):
                  expansion_factor : int = 2,
                  dropout_rate : float = .2,
                  norm_type : str = 'scale_norm',
-                 shift_tokens : bool = True,
+                 shift_tokens : bool = False,
                  **kwargs):
         super(Transformer, self).__init__(**kwargs)
         self.depth = depth
