@@ -43,7 +43,7 @@ class AutoregressiveWrapper(Model):
         self.model = model
 
     def generate(self,
-                 input_tokens : tf.Tensor,
+                 input_ids : tf.Tensor,
                  max_new_tokens : int,
                  eos_token = None,
                  temperature : float = 1.0,
@@ -51,14 +51,14 @@ class AutoregressiveWrapper(Model):
                  top_p : float = 1.0,
                  max_tokens : int = 20):
         out = tf.TensorArray(
-            dtype = input_tokens.dtype,
+            dtype = input_ids.dtype,
             size = 0,
             dynamic_size = True)
 
-        for idx, token in enumerate(input_tokens[-1]):
+        for idx, token in enumerate(input_ids[-1]):
             out = out.write(idx, token[tf.newaxis])
 
-        size = tf.size(input_tokens)
+        size = tf.size(input_ids)
         for i in tf.range(size, size + max_new_tokens - 1):
 
             if i + 1 == max_tokens:
@@ -70,7 +70,7 @@ class AutoregressiveWrapper(Model):
             logits = top_k_fn(x, top_k)
             logits = top_p_fn(x, top_p)
             probs = tf.nn.softmax(logits / temperature, axis = -1)
-            sample = tf.random.categorical(probs, 1, dtype = input_tokens.dtype)
+            sample = tf.random.categorical(probs, 1, dtype = input_ids.dtype)
 
             out = out.write(i + 1, sample[0])
 
