@@ -299,7 +299,8 @@ class GAUTransformer(Model):
                 expansion_factor = expansion_factor,
                 dropout_rate = dropout_rate,
                 norm_type = norm_type,
-                shift_tokens = shift_tokens
+                shift_tokens = shift_tokens,
+                name = f'gau{i}'
             ) for _ in range(depth)])
 
         self.to_logits = Sequential([
