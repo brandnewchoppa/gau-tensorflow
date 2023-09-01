@@ -277,11 +277,11 @@ class ScaledSin(Layer):
         scaled_emb = tf.concat([ math.sin(pos), math.cos(pos) ], axis = -1)
         return scaled_emb * self.scale
     
-class Transformer(Model):
+class GAUTransformer(Model):
     def __init__(self,
                  *,
-                 dim,
-                 n_tokens,
+                 emb_dim : int,
+                 n_tokens : int,
                  depth : int = 4,
                  qk_dim : int = 64,
                  expansion_factor : int = 2,
@@ -290,9 +290,7 @@ class Transformer(Model):
                  shift_tokens : bool = False,
                  **kwargs):
         super(Transformer, self).__init__(**kwargs)
-        self.depth = depth
-
-        self.token_emb = Embedding(n_tokens, dim)
+        self.token_emb = Embedding(n_tokens, emb_dim)
         self.abs_pos_emb = ScaledSin()
 
         self.blocks = Sequential([
