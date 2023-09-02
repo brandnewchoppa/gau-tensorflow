@@ -1,5 +1,6 @@
 import tensorflow as tf
 
+from rope_tensorflow import RoPE
 from tensorflow import einsum, reshape, cast
 from tensorflow import math
 
