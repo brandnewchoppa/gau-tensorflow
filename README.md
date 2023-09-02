@@ -20,6 +20,7 @@ from gau_tensorflow import Transformer
 model = Transformer(
     emb_dim = 128,        # embedding dimension
     n_tokens = 50256      # number of tokens used in the vocabulary
+    depth = 4             # number of blocks stacked in the model
 )
 
 x = tf.random.uniform([1, 512], 0, 50256, 'int64')
