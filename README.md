@@ -18,7 +18,7 @@ import tensorflow as tf
 from gau_tensorflow import Transformer
 
 model = Transformer(
-    dim = 128,            # embedding dimension
+    emb_dim = 128,        # embedding dimension
     n_tokens = 50256      # number of tokens used in the vocabulary
 )
 
