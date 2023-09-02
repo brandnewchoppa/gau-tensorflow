@@ -72,7 +72,7 @@ class AutoregressiveWrapper(Model):
             probs = tf.nn.softmax(logits / temperature, axis = -1)
             sample = tf.random.categorical(probs, 1, dtype = input_ids.dtype)
 
-            out = out.write(i + 1, sample[0])
+            out = out.write(i, sample[0])
 
             if sample == eos_token:
                 break
