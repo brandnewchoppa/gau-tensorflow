@@ -387,12 +387,12 @@ class GAUTransformer(Model):
                 shift_tokens = shift_tokens,
                 use_rotary_embs = use_rotary_embs,
                 name = f'gau{i}'
-            ) for i in range(depth)])
+            ) for i in range(depth)], name = 'blocks')
 
         self.to_logits = Sequential([
             LayerNormalization(),
             Dense(n_tokens)
-        ])
+        ], name = 'logits')
 
     def call(self, x):
         x = self.token_emb(x)
