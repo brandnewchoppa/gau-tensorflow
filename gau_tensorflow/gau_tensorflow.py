@@ -289,7 +289,7 @@ class GAUTransformer(Model):
                  norm_type : str = 'scale_norm',
                  shift_tokens : bool = False,
                  **kwargs):
-        super(Transformer, self).__init__(**kwargs)
+        super(GAUTransformer, self).__init__(**kwargs)
         self.token_emb = Embedding(n_tokens, emb_dim)
         self.abs_pos_emb = ScaledSin()
 
