@@ -252,6 +252,7 @@ class GAU(Layer):
                  dropout_rate : float = .2,
                  norm_type : str = 'scale_norm',
                  shift_tokens : bool = False,
+                 use_rotary_embs : bool = False,
                  **kwargs):
         super().__init__(**kwargs)
         self.qk_dim = qk_dim
@@ -259,6 +260,7 @@ class GAU(Layer):
         self.dropout_rate = dropout_rate
         self.norm_type = norm_type
         self.shift_tokens = shift_tokens
+        self.use_rotary_embs = use_rotary_embs
 
     def build(self, x_shape):
         e = x_shape[-1]
@@ -368,8 +370,11 @@ class GAUTransformer(Model):
                  dropout_rate : float = .2,
                  norm_type : str = 'scale_norm',
                  shift_tokens : bool = False,
+                 use_rotary_embs : bool = False,
                  **kwargs):
         super().__init__(**kwargs)
+        self.depth = depth
+                     
         self.token_emb = Embedding(n_tokens, emb_dim)
         self.abs_pos_emb = ScaledSin()
 
@@ -380,6 +385,7 @@ class GAUTransformer(Model):
                 dropout_rate = dropout_rate,
                 norm_type = norm_type,
                 shift_tokens = shift_tokens,
+                use_rotary_embs = use_rotary_embs,
                 name = f'gau{i}'
             ) for i in range(depth)])
 
