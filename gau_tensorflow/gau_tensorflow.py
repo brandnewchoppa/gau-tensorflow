@@ -207,6 +207,9 @@ class GAU(Layer):
         self.scale_offset = OffsetScale(
             splits = 2)
 
+        self.rotary_pos_embs = RoPE(
+            dim = self.qk_dim // 2)
+
         self.rel_pos_bias = RelativePositionBias(
             scale = e ** .5)
 
@@ -224,6 +227,10 @@ class GAU(Layer):
         n = cast(x.shape[-2], 'float32')
         z = self.to_qk(x)
         q, k = self.scale_offset(z)
+
+        if self.use_rotary_embs:
+            q, k = self.rotary_pos_embs.rotate([q, k])
+        
         qk = einsum('bns, bms -> bnm', q, k)
         
         a = tf.nn.relu(qk / n + self.rel_pos_bias(qk)) ** 2
