@@ -301,7 +301,7 @@ class GAUTransformer(Model):
                 norm_type = norm_type,
                 shift_tokens = shift_tokens,
                 name = f'gau{i}'
-            ) for _ in range(depth)])
+            ) for i in range(depth)])
 
         self.to_logits = Sequential([
             LayerNormalization(),
