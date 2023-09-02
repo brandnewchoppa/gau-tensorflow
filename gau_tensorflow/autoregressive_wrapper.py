@@ -39,7 +39,7 @@ class AutoregressiveWrapper(Model):
     def __init__(self,
                  model,
                  **kwargs):
-        super().__init__(**kwargs)
+        super(AutoregressiveWrapper, self).__init__(**kwargs)
         self.model = model
 
     def generate(self,
