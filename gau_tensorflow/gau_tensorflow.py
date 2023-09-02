@@ -36,7 +36,7 @@ class ScaleNorm(Layer):
                  eps : float = 1e-5,
                  scale_by_dim : bool = False,
                  **kwargs):
-        super(ScaleNorm, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.eps = eps
         self.scale_by_dim = scale_by_dim
 
@@ -78,7 +78,7 @@ class OffsetScale(Layer):
     def __init__(self,
                  splits : int = 1,
                  **kwargs):
-        super(OffsetScale, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.splits = splits
 
     def build(self, x_shape):
@@ -119,7 +119,7 @@ class RelativePositionBias(Layer):
                  n_buckets : int = 32,
                  max_distance : int = 128,
                  **kwargs):
-        super(RelativePositionBias, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.scale = scale
         self.n_buckets = n_buckets
         self.max_distance = max_distance
@@ -180,7 +180,7 @@ class GAU(Layer):
                  norm_type : str = 'scale_norm',
                  shift_tokens : bool = False,
                  **kwargs):
-        super(GAU, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.qk_dim = qk_dim
         self.expansion_factor = expansion_factor
         self.dropout_rate = dropout_rate
@@ -257,7 +257,7 @@ class ScaledSin(Layer):
     """
 
     def __init__(self):
-        super(ScaledSin, self).__init__()
+        super().__init__()
 
     def build(self, x_shape):
         d = x_shape[-1]
@@ -289,7 +289,7 @@ class GAUTransformer(Model):
                  norm_type : str = 'scale_norm',
                  shift_tokens : bool = False,
                  **kwargs):
-        super(GAUTransformer, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.token_emb = Embedding(n_tokens, emb_dim)
         self.abs_pos_emb = ScaledSin()
 
