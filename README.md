@@ -26,6 +26,14 @@ x = tf.random.uniform([1, 512], 0, 50256, 'int64')
 logits = model(x, training = False)
 ```
 
+### Interpolate Sequence Posisition
+
+```python
+for i in range(model.depth):
+    model.get_layer('blocks').get_layer(f'gau{i}').rotary_pos_embs.interpolate_factor = 2.0
+```
+
+
 ## Citations
 
 ```bibtex
