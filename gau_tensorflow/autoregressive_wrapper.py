@@ -14,7 +14,7 @@ def top_k_fn(logits, k = 0):
     top_k = tf.clip_by_value(k, clip_value_min = 1, clip_value_max = logits.shape[-1])
     values, _ = tf.math.top_k(logits, k = top_k)
     indices_to_remove = logits < values[..., -1][tf.newaxis]
-    return tf.where(indices_to_remove, tf.fill(logits.shape, float('-inf')), tf.cast(logits, 'float32'))
+    return tf.where(indices_to_remove, tf.fill(logits.shape, float('-inf')), tf.cast(logits, tf.float32))
 
 def top_p_fn(logits, p = .9):
     '''
@@ -25,7 +25,7 @@ def top_p_fn(logits, p = .9):
     exceeds the probability p.
     '''
 
-    sorted_logits = tf.cast(tf.sort(logits, direction = 'DESCENDING', axis = -1), 'float32')
+    sorted_logits = tf.cast(tf.sort(logits, direction = 'DESCENDING', axis = -1), tf.float32)
     cum_probs = tf.cumsum(tf.nn.softmax(sorted_logits, axis = -1), axis = -1)
     sorted_indices_to_remove = cum_probs > (1 - p)
     sorted_indices_to_remove = tf.roll(sorted_indices_to_remove, 1, axis = -1)
