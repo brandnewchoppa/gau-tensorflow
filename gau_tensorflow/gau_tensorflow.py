@@ -138,16 +138,16 @@ class RelativePositionBias(Layer):
         is_small = n < max_exact
 
         val_if_large = max_exact + cast(
-            math.log(cast(n, 'float32') / max_exact) / math.log(max_distance / max_exact) * (n_buckets - max_exact),
+            math.log(cast(n, tf.float32) / max_exact) / math.log(max_distance / max_exact) * (n_buckets - max_exact),
             'int64')
-        val_if_large = math.minimum(val_if_large, cast(tf.fill(val_if_large.shape, n_buckets - 1), 'int64'))
+        val_if_large = math.minimum(val_if_large, cast(tf.fill(val_if_large.shape, n_buckets - 1), tf.int32))
 
         return tf.where(is_small, cast(n, 'int64'), val_if_large)
 
     def forward(self, x):
         i, j = x.shape[-2:]
-        q_pos = tf.range(i, dtype = tf.dtypes.int64)
-        k_pos = tf.range(j, dtype = tf.dtypes.int64)
+        q_pos = tf.range(i, dtype = tf.int32)
+        k_pos = tf.range(j, dtype = tf.int32)
         rel_pos = reshape(k_pos, [1] + k_pos.shape) - reshape(q_pos, q_pos.shape + [1])
         rp_bucket = self._relative_position_bucket(rel_pos, self.n_buckets, self.max_distance)
         values = self.relative_attention_bias(rp_bucket)
@@ -298,7 +298,7 @@ class GAU(Layer):
         self.built = True
 
     def _attn(self, x, v):
-        n = cast(x.shape[-2], 'float32')
+        n = cast(x.shape[-2], x.dtype)
         z = self.to_qk(x)
         q, k = self.scale_offset(z)
 
@@ -308,7 +308,7 @@ class GAU(Layer):
         qk = einsum('bns, bms -> bnm', q, k)
         
         a = tf.nn.relu(qk / n + self.rel_pos_bias(qk)) ** 2
-        mask = tf.cast(tf.linalg.band_part(tf.ones([n, n]), -1, 0), 'bool')
+        mask = tf.cast(tf.linalg.band_part(tf.ones([n, n]), -1, 0), tf.bool)
         a = tf.where(mask, a, -1e10)
         
         return einsum('bnm, bme -> bne', a, v)
@@ -349,7 +349,7 @@ class ScaledSin(Layer):
             shape = (),
             initializer = tf.constant_initializer(1 / d ** .5))
 
-        self.inv_freq = 1. / (10000 ** (tf.range(0, d, 2, 'float32') / d))
+        self.inv_freq = 1. / (10000 ** (tf.range(0, d, 2, tf.float32) / d))
 
     def call(self, x):
         n = x.shape[-2]
