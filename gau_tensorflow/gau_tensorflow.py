@@ -249,6 +249,7 @@ class GAU(Layer):
                  *,
                  qk_dim : int = 64,
                  expansion_factor : int = 2,
+                 causal : bool = Falsem
                  dropout_rate : float = .2,
                  norm_type : str = 'scale_norm',
                  shift_tokens : bool = False,
@@ -257,6 +258,7 @@ class GAU(Layer):
         super().__init__(**kwargs)
         self.qk_dim = qk_dim
         self.expansion_factor = expansion_factor
+        self.causal = causal
         self.dropout_rate = dropout_rate
         self.norm_type = norm_type
         self.shift_tokens = shift_tokens
@@ -306,10 +308,11 @@ class GAU(Layer):
             q, k = self.rotary_pos_embs.rotate([q, k])
         
         qk = einsum('bns, bms -> bnm', q, k)
-        
         a = tf.nn.relu(qk / n + self.rel_pos_bias(qk)) ** 2
-        mask = tf.cast(tf.linalg.band_part(tf.ones([n, n]), -1, 0), tf.bool)
-        a = tf.where(mask, a, -1e10)
+
+        if self.causal:
+            mask = tf.cast(tf.linalg.band_part(tf.ones([n, n]), -1, 0), tf.bool)
+            a = tf.where(mask, a, -1e10)
         
         return einsum('bnm, bme -> bne', a, v)
 
@@ -367,6 +370,7 @@ class GAUTransformer(Model):
                  depth : int = 4,
                  qk_dim : int = 64,
                  expansion_factor : int = 2,
+                 causal : bool = False,
                  dropout_rate : float = .2,
                  norm_type : str = 'scale_norm',
                  shift_tokens : bool = False,
@@ -382,6 +386,7 @@ class GAUTransformer(Model):
             GAU(
                 qk_dim = qk_dim,
                 expansion_factor = expansion_factor,
+                causal = causal,
                 dropout_rate = dropout_rate,
                 norm_type = norm_type,
                 shift_tokens = shift_tokens,
