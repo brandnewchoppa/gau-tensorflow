@@ -8,6 +8,7 @@ Gated Attention Unit (TensorFlow implementation) from the paper [Transformer Qua
 - [x] Rotary Embeddings
 - [ ] ScaleNorm + FixNorm experiment from the [paper](https://arxiv.org/pdf/1910.05895.pdf)
 - [ ] Gradient Checkpointing
+- [ ] Add RMSNorm
 
 > [!WARNING]
 > This repository is under developemnt, but please feel free to explore and provide any feedback or suggestions you may have. :construction:
