@@ -249,7 +249,7 @@ class GAU(Layer):
                  *,
                  qk_dim : int = 64,
                  expansion_factor : int = 2,
-                 causal : bool = Falsem
+                 causal : bool = False,
                  dropout_rate : float = .2,
                  norm_type : str = 'scale_norm',
                  shift_tokens : bool = False,
