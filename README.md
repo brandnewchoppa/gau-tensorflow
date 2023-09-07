@@ -25,7 +25,7 @@ model = Transformer(
     causal = True         # autoregressive functionality
 )
 
-x = tf.random.uniform([1, 512], 0, 50256, 'int64')
+x = tf.random.uniform([1, 512], 0, 50256, tf.int64)
 logits = model(x, training = False)
 ```
 
