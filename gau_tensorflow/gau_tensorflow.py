@@ -269,7 +269,9 @@ class GAU(Layer):
 
         if self.norm_type == 'scale_norm':
             self.norm = ScaleNorm()
-        else:
+        elif self.norm_type == 'layer_norm':
+            self.norm = LayerNormalization()
+        elif self.norm_type == 'rms_norm':
             self.norm = LayerNormalization()
 
         self.to_uv = Dense(
@@ -372,7 +374,7 @@ class GAUTransformer(Model):
                  expansion_factor : int = 2,
                  causal : bool = False,
                  dropout_rate : float = .2,
-                 norm_type : str = 'scale_norm',
+                 norm_type : str = 'layer_norm',
                  shift_tokens : bool = False,
                  use_rotary_embs : bool = False,
                  **kwargs):
