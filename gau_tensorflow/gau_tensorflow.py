@@ -360,7 +360,7 @@ class ScaledSin(Layer):
         pos = tf.range(n, dtype = self.inv_freq.dtype)
         pos = einsum('s, d -> sd', pos, self.inv_freq)
         scaled_emb = tf.concat([ math.sin(pos), math.cos(pos) ], axis = -1)
-        return scaled_emb * self.scale
+        return scaled_emb * tf.cast(self.scale, scaled_emb.dtype)
     
 class GAUTransformer(Model):
     def __init__(self,
