@@ -5,7 +5,6 @@ from tensorflow import math
 
 from keras import Model, Sequential
 from keras.layers import Layer
-from keras.initializers import ones, zeros
 
 from keras.layers import (
     Dense,
@@ -45,7 +44,7 @@ class ScaleNorm(Layer):
         self.scale = self.add_weight(
             name = 'scale',
             shape = (),
-            initializer = ones())
+            initializer = tf.keras.initializers.ones())
 
         self.built = True
 
@@ -58,7 +57,52 @@ class ScaleNorm(Layer):
         norm = tf.clip_by_value(x, self.eps, norm.dtype.max)
         norm = self.scale / norm
         return x * norm
-    
+
+class RMSNorm(Layer):
+    """
+    Root Mean Square Layer Normalization (RMSNorm)
+    https://arxiv.org/pdf/1910.07467.pdf
+
+    A well-known explanation of the success of LayerNorm is its re-centering
+    and re-scaling invariance property. However RMSNorm only focuses on
+    re-scaling invariance and regularizes the summed inputs simply according
+    to the root mean square statistic.
+
+    Intuitively, RMSNorm simplifies LayerNorm by totally removing the
+    mean statistic at the cost of sacrificing the invariance that mean
+    normalization affords.
+    """
+
+    def __init__(self,
+                 *,
+                 eps : float = 1e-8,
+                 p : float = -1.0,
+                 use_bias : bool = False,
+                 **kwargs):
+        super().__init__(**kwargs)
+        self.eps = eps
+        self.p = p
+        self.use_bias = use_bias
+
+    def build(self, x_shape):
+        n = x_shape[-1]
+
+        self.scale = self.add_weight(
+            name = 'scale',
+            shape = (1, n),
+            initializer = tf.keras.initializers.ones())
+
+        self.offset = self.add_weight(
+            name = 'offset',
+            shape = (1, n) if self.use_bias else (1,),
+            initializer = tf.keras.initializers.zeros())
+
+        self.built = True
+
+    def call(self, x):
+        ms = tf.reduce_mean(tf.math.square(x), axis = -1, keepdims = True)
+        return self.scale * x * tf.math.rsqrt(ms + self.eps) + self.offset
+
 class OffsetScale(Layer):
     """
     Offset Scale (OffsetScale)
@@ -87,12 +131,12 @@ class OffsetScale(Layer):
         self.gamma = self.add_weight(
             name = 'gamma',
             shape = (self.splits, e),
-            initializer = ones())
+            initializer = tf.keras.initializers.ones())
 
         self.beta = self.add_weight(
             name = 'beta',
             shape = (self.splits, e),
-            initializer = zeros())
+            initializer = tf.keras.initializers.zeros())
 
         self.built = True
 
