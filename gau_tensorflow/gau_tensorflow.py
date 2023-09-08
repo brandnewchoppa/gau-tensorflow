@@ -316,7 +316,7 @@ class GAU(Layer):
         elif self.norm_type == 'layer_norm':
             self.norm = LayerNormalization()
         elif self.norm_type == 'rms_norm':
-            self.norm = LayerNormalization()
+            self.norm = RMSNorm()
 
         self.to_uv = Dense(
             (e * self.expansion_factor) * 2,
