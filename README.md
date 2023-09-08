@@ -21,7 +21,7 @@ from gau_tensorflow import Transformer
 
 model = Transformer(
     emb_dim = 128,        # embedding dimension
-    n_tokens = 50256,     # number of tokens used in the vocabulary
+    n_tokens = 50257,     # number of tokens used in the vocabulary
     depth = 4,            # number of blocks stacked in the model
     causal = True         # autoregressive functionality
 )
