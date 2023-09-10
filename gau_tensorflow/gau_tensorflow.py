@@ -395,7 +395,7 @@ class GAU(Layer):
 
         if self.causal:
             mask = tf.cast(tf.linalg.band_part(tf.ones([n, n]), -1, 0), tf.bool)
-            a = tf.where(mask, a, -1e10)
+            a = tf.where(mask, a, 0.0)
         
         return einsum('bnm, bme -> bne', a, v)
 
