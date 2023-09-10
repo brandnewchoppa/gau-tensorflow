@@ -271,6 +271,36 @@ class RoPE(Layer):
         freqs, _ = self._calc_freqs(x)
         return apply_rotary_emb(freqs, x)
 
+class LaplacianAttnFn(Layer):
+    """
+    Laplacian Attention Function (LaplacianAttnFn)
+    https://arxiv.org/abs/2209.10655
+
+    Replacement for Squared ReLU via architecture search techniques which has
+    shown faster convergence speed and competitive generalization performance
+    on language tasks.
+    """
+
+    def __init__(self,
+                 use_n : bool = True,
+                 **kwargs):
+        super().__init__(**kwargs)
+        self.use_n = use_n
+        self.PI = 3.14159265358
+
+    def call(self, x):
+    
+        ## With the increasing length of the vectors the results are starting
+        ## to become 1.0, to prevent this I introduced a new variable into
+        ## the function to squeeze the domain a little bit. With this
+        ## modification the values won't become 1.0 at the near end of the vecs.
+        n = tf.saturate_cast(x.shape[-2], x.dtype) if self.use_n else 2.0
+
+        mu = tf.saturate_cast(math.sqrt(0.5), x.dtype)
+        std = tf.saturate_cast(math.sqrt(0.25 * self.PI), x.dtype)
+        inner = (x - mu) / (std * tf.cast(math.sqrt(n), x.dtype))
+        return 0.5 * (1 + math.erf(inner))
+
 class GAU(Layer):
     """
     Gated Attention Unit (GAU)
@@ -298,6 +328,7 @@ class GAU(Layer):
                  norm_type : str = 'scale_norm',
                  shift_tokens : bool = False,
                  use_rotary_embs : bool = False,
+                 laplace_attn_fn : bool = False,
                  **kwargs):
         super().__init__(**kwargs)
         self.qk_dim = qk_dim
@@ -307,6 +338,7 @@ class GAU(Layer):
         self.norm_type = norm_type
         self.shift_tokens = shift_tokens
         self.use_rotary_embs = use_rotary_embs
+        self.laplace_attn_fn = laplace_attn_fn
 
     def build(self, x_shape):
         e = x_shape[-1]
@@ -343,6 +375,11 @@ class GAU(Layer):
             Dropout(rate = self.dropout_rate)
         ])
 
+        if self.laplace_attn_fn:
+            self.attn_fn = LaplacianAttnFn()
+        else:
+            self.attn_fn = lambda x : tf.math.square(tf.nn.relu(x))
+
         self.built = True
 
     def _attn(self, x, v):
@@ -354,7 +391,7 @@ class GAU(Layer):
             q, k = self.rotary_pos_embs.rotate([q, k])
         
         qk = einsum('bns, bms -> bnm', q, k)
-        a = tf.nn.relu(qk / n + self.rel_pos_bias(qk)) ** 2
+        a = self.attn_fn(qk / n + self.rel_pos_bias(qk))
 
         if self.causal:
             mask = tf.cast(tf.linalg.band_part(tf.ones([n, n]), -1, 0), tf.bool)
@@ -421,6 +458,7 @@ class GAUTransformer(Model):
                  norm_type : str = 'layer_norm',
                  shift_tokens : bool = False,
                  use_rotary_embs : bool = False,
+                 laplace_attn_fn : bool = False,
                  **kwargs):
         super().__init__(**kwargs)
         self.depth = depth
@@ -437,6 +475,7 @@ class GAUTransformer(Model):
                 norm_type = norm_type,
                 shift_tokens = shift_tokens,
                 use_rotary_embs = use_rotary_embs,
+                laplace_attn_fn = laplace_attn_fn,
                 name = f'gau{i}'
             ) for i in range(depth)], name = 'blocks')
 
@@ -448,6 +487,5 @@ class GAUTransformer(Model):
     def call(self, x):
         x = self.token_emb(x)
         x = self.abs_pos_emb(x) + x
-
         x = self.blocks(x)
         return self.to_logits(x)
