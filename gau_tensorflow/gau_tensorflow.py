@@ -44,7 +44,7 @@ class ScaleNorm(Layer):
         self.scale = self.add_weight(
             name = 'scale',
             shape = (),
-            initializer = tf.keras.initializers.ones())
+            initializer = tf.ones_initializer())
 
         self.built = True
 
@@ -85,17 +85,17 @@ class RMSNorm(Layer):
         self.use_bias = use_bias
 
     def build(self, x_shape):
-        n = x_shape[-1]
+        d = x_shape[-1]
 
         self.scale = self.add_weight(
             name = 'scale',
-            shape = (1, n),
-            initializer = tf.keras.initializers.ones())
+            shape = (1, d),
+            initializer = tf.ones_initializer())
 
         self.offset = self.add_weight(
             name = 'offset',
-            shape = (1, n) if self.use_bias else (1,),
-            initializer = tf.keras.initializers.zeros())
+            shape = (1, d) if self.use_bias else (1,),
+            initializer = tf.zeros_initializer())
 
         self.built = True
 
@@ -126,16 +126,16 @@ class OffsetScale(Layer):
         self.splits = splits
 
     def build(self, x_shape):
-        e = x_shape[-1]
+        d = x_shape[-1]
 
         self.gamma = self.add_weight(
             name = 'gamma',
-            shape = (self.splits, e),
+            shape = (self.splits, d),
             initializer = tf.keras.initializers.ones())
 
         self.beta = self.add_weight(
             name = 'beta',
-            shape = (self.splits, e),
+            shape = (self.splits, d),
             initializer = tf.keras.initializers.zeros())
 
         self.built = True
@@ -257,10 +257,10 @@ class RoPE(Layer):
     def rotate(self, x):
         if isinstance(x, list):
             q, k = x
-            n = q.shape[-1]
+            d = q.shape[-1]
             freqs, seq_pos = self._calc_freqs(q)
 
-            power = (seq_pos - n // 2) / self.scale_base
+            power = (seq_pos - d // 2) / self.scale_base
             scale = self.scale ** tf.transpose(power[tf.newaxis])
             scale =  tf.concat([ scale, scale ], axis = -1)
 
@@ -341,7 +341,7 @@ class GAU(Layer):
         self.laplace_attn_fn = laplace_attn_fn
 
     def build(self, x_shape):
-        e = x_shape[-1]
+        d = x_shape[-1]
 
         if self.norm_type == 'scale_norm':
             self.norm = ScaleNorm()
@@ -351,7 +351,7 @@ class GAU(Layer):
             self.norm = RMSNorm()
 
         self.to_uv = Dense(
-            (e * self.expansion_factor) * 2,
+            (d * self.expansion_factor) * 2,
             activation = 'silu')
 
         self.to_qk = Dense(
@@ -365,13 +365,13 @@ class GAU(Layer):
             dim = self.qk_dim // 2)
 
         self.rel_pos_bias = RelativePositionBias(
-            scale = e ** .5)
+            scale = d ** .5)
 
         self.dropout = Dropout(
             rate = self.dropout_rate)
 
         self.to_out = Sequential([
-            Dense(e),
+            Dense(d),
             Dropout(rate = self.dropout_rate)
         ])
 
