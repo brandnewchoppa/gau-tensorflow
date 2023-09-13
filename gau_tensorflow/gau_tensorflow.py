@@ -479,10 +479,10 @@ class GAUTransformer(Model):
                 name = f'gau{i}'
             ) for i in range(depth)], name = 'blocks')
 
-        self.to_logits = Sequential([
+        self.to_logits = tf.recompute_grad(Sequential([
             LayerNormalization(),
-            tf.recompute_grad(Dense(n_tokens))
-        ], name = 'logits')
+            Dense(n_tokens)
+        ], name = 'logits'))
 
     @tf.function(jit_compile = True)
     def call(self, x):
