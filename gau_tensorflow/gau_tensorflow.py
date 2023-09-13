@@ -350,9 +350,9 @@ class GAU(Layer):
         elif self.norm_type == 'rms_norm':
             self.norm = RMSNorm()
 
-        self.to_uv = Dense(
+        self.to_uv = tf.recompute_grad(Dense(
             (d * self.expansion_factor) * 2,
-            activation = 'silu')
+            activation = 'silu'))
 
         self.to_qk = Dense(
             self.qk_dim,
@@ -481,7 +481,7 @@ class GAUTransformer(Model):
 
         self.to_logits = Sequential([
             LayerNormalization(),
-            Dense(n_tokens)
+            tf.recompute_grad(Dense(n_tokens))
         ], name = 'logits')
 
     @tf.function(jit_compile = True)
