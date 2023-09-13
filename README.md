@@ -13,7 +13,7 @@ Gated Attention Unit (TensorFlow implementation) from the paper [Transformer Qua
 > [!WARNING]
 > This repository is under developemnt, but please feel free to explore and provide any feedback or suggestions you may have. :construction:
 
-## Install on Google Colab
+## Clone to Google Colab
 ```shell
 !git clone https://github.com/brandnewchoppa/gau-tensorflow.git
 !mv /content/gau-tensorflow/gau_tensorflow .
