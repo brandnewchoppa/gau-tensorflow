@@ -9,6 +9,7 @@ Gated Attention Unit (TensorFlow implementation) from the paper [Transformer Qua
 - [ ] ScaleNorm + FixNorm experiment from the [paper](https://arxiv.org/pdf/1910.05895.pdf)
 - [x] Gradient Checkpointing (with tf.recompute_grad)
 - [x] Add RMSNorm
+- [ ] Extend inference with tokenizer and __call__(str) method to directly call the text
 
 > [!WARNING]
 > This repository is under developemnt, but please feel free to explore and provide any feedback or suggestions you may have. :construction:
