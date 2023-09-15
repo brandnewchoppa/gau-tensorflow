@@ -203,8 +203,7 @@ def rotate_half(x):
     x = tf.reshape(x, x.shape[:-1] + [ x.shape[-1] // 2, 2 ])
     x1, x2 = tf.split(x, 2, axis = -1)
     #x1, x2 = tf.squeeze([x1, x2], axis = -1)
-    x1 = tf.squeeze(x1, axis = -1)
-    x2 = tf.squeeze(x2, axis = -1)
+    x1, x2 = tf.squeeze(x1, axis = -1), tf.squeeze(x2, axis = -1)
     x = tf.stack([ -x2, x1 ], axis = -1)
     return tf.reshape(x, x_shape)
 
