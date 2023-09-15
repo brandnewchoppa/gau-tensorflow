@@ -19,7 +19,7 @@ setup(
     ],
     install_requires = [
         'tensorflow>=2.13.0',
-        'rope-tensorflow @ git+https://github.com/brandnewchoppa/rope-tensorflow/master#egg=v0.0.2'
+        'rope-tensorflow @ git+https://github.com/brandnewchoppa/rope-tensorflow#egg=v0.0.2'
     ],
     classifiers = [
         'Development Status :: 2 - Pre-Alpha',
