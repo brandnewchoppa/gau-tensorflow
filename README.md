@@ -15,12 +15,10 @@ Gated Attention Unit (TensorFlow implementation) from the paper [Transformer Qua
 > [!WARNING]
 > This repository is under developemnt, but please feel free to explore and provide any feedback or suggestions you may have. :construction:
 
-## Clone to Google Colab
+## Install on Google Colab
 Execute this shell snippet in a colab cell and import the module easily.
 ```shell
-!git clone https://github.com/brandnewchoppa/gau-tensorflow.git
-!mv /content/gau-tensorflow/gau_tensorflow .
-!rm -rf gau-tensorflow
+!pip install git+https://github.com/brandnewchoppa/gau-tensorflow.git
 ```
 
 ## Usage
