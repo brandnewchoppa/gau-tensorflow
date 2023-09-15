@@ -1,5 +1,6 @@
 import tensorflow as tf
 
+from rope_tensorflow import RoPE
 from tensorflow import einsum, reshape, cast
 from tensorflow import math
 
@@ -198,6 +199,7 @@ class RelativePositionBias(Layer):
         bias = reshape(values, values.shape[:-1])
         return bias * self.scale
 
+"""
 def rotate_half(x):
     x_shape = x.shape
     x = tf.reshape(x, x.shape[:-1] + [ x.shape[-1] // 2, 2 ])
@@ -271,16 +273,17 @@ class RoPE(Layer):
 
         freqs, _ = self._calc_freqs(x)
         return apply_rotary_emb(freqs, x)
+"""
 
 class LaplacianAttnFn(Layer):
-    """
+    '''
     Laplacian Attention Function (LaplacianAttnFn)
     https://arxiv.org/abs/2209.10655
 
     Replacement for Squared ReLU via architecture search techniques which has
     shown faster convergence speed and competitive generalization performance
     on language tasks.
-    """
+    '''
 
     def __init__(self,
                  use_n : bool = True,
@@ -303,7 +306,7 @@ class LaplacianAttnFn(Layer):
         return 0.5 * (1 + math.erf(inner))
 
 class GAU(Layer):
-    """
+    '''
     Gated Attention Unit (GAU)
     https://arxiv.org/pdf/2202.10447.pdf
 
@@ -318,7 +321,7 @@ class GAU(Layer):
 
     References:
     https://github.com/lucidrains/FLASH-pytorch (implementation logic)
-    """
+    '''
 
     def __init__(self,
                  *,
