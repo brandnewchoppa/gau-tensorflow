@@ -20,6 +20,9 @@ setup(
     install_requires = [
         'tensorflow>=2.13.0'
     ],
+    dependecy_links = [
+        'git+https://github.com/brandnewchoppa/rope-tensorflow'
+    ],
     classifiers = [
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
