@@ -10,7 +10,7 @@ Gated Attention Unit (TensorFlow implementation) from the paper [Transformer Qua
 - [x] Gradient Checkpointing (with tf.recompute_grad)
 - [x] Add RMSNorm
 - [ ] Extend inference with tokenizer and __call__(str) method to directly call the text
-- [ ] implement custom 'pre_train_step' and 'classic_train_step'
+- [ ] Implement custom 'pre_train_step' and 'legacy_train_step' for compatibility with model.fit
 
 > [!WARNING]
 > This repository is under developemnt, so expect changes regulary but please feel free to explore and provide any feedback or suggestions you may have. :construction:
