@@ -13,7 +13,7 @@ Gated Attention Unit (TensorFlow implementation) from the paper [Transformer Qua
 - [ ] implement custom 'pre_train_step' and 'classic_train_step'
 
 > [!WARNING]
-> This repository is under developemnt, but please feel free to explore and provide any feedback or suggestions you may have. :construction:
+> This repository is under developemnt, so expect changes regulary but please feel free to explore and provide any feedback or suggestions you may have. :construction:
 
 ## Install
 ```shell
