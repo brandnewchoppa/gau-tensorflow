@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name = 'gau-tensorflow',
     packages = find_packages(exclude = []),
-    version = '0.0.9',
+    version = '0.1.0',
     license = 'MIT',
     description = 'GAU - Transformer Quality in Linear Time - TensorFlow',
     author = 'brandnewchoppa',
@@ -19,10 +19,10 @@ setup(
     ],
     install_requires = [
         'tensorflow>=2.13.0',
-        'rope-tensorflow @ git+https://github.com/brandnewchoppa/rope-tensorflow#egg=v0.0.2'
+        'rope-tensorflow @ git+https://github.com/brandnewchoppa/rope-tensorflow#egg=v0.0.3'
     ],
     classifiers = [
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
         'Topic :: Scientific/Engineering :: Artificial Intelligence',
         'License :: MIT License',
