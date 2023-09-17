@@ -121,6 +121,7 @@ class OffsetScale(Layer):
     """
 
     def __init__(self,
+                 *,
                  splits : int = 1,
                  **kwargs):
         super().__init__(**kwargs)
