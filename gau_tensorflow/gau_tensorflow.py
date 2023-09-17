@@ -489,7 +489,7 @@ class GAUTransformer(Model):
             Dense(n_tokens)
         ], name = 'logits'))
 
-    @tf.function(jit_compile = False)
+    #@tf.function(jit_compile = False)
     def call(self, x):
         x = self.token_emb(x)
         x = self.abs_pos_emb(x) + x
