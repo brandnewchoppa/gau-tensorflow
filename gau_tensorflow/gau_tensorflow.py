@@ -283,9 +283,9 @@ class GAU(Layer):
             (d * self.expansion_factor) * 2,
             activation = 'silu'))
 
-        self.to_qk = Dense(
+        self.to_qk = tf.recompute_grad(Dense(
             self.qk_dim,
-            activation = 'silu')
+            activation = 'silu'))
 
         self.scale_offset = OffsetScale(
             splits = 2)
