@@ -34,6 +34,9 @@ model = Transformer(
 
 x = tf.random.uniform([1, 512], 0, 50257, tf.int64)
 logits = model(x, training = False)
+
+## this also works
+model.build(tf.TensorShape([None, 512]))
 ```
 
 ### Interpolate Sequence Positions
