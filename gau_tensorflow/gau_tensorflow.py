@@ -256,7 +256,7 @@ class GAU(Layer):
                  dropout_rate : float = .2,
                  norm_type : str = 'scale_norm',
                  shift_tokens : bool = False,
-                 use_rotary_embs : bool = False,
+                 use_rope : bool = False,
                  laplace_attn_fn : bool = False,
                  **kwargs):
         super().__init__(**kwargs)
@@ -266,7 +266,7 @@ class GAU(Layer):
         self.dropout_rate = dropout_rate
         self.norm_type = norm_type
         self.shift_tokens = shift_tokens
-        self.use_rotary_embs = use_rotary_embs
+        self.use_rope = use_rope
         self.laplace_attn_fn = laplace_attn_fn
 
     def build(self, x_shape):
@@ -316,7 +316,7 @@ class GAU(Layer):
         z = self.to_qk(x)
         q, k = self.scale_offset(z)
 
-        if self.use_rotary_embs:
+        if self.use_rope:
             q, k = self.rotary_pos_embs.rotate([q, k])
         
         qk = einsum('bns, bms -> bnm', q, k)
@@ -386,7 +386,7 @@ class GAUTransformer(Model):
                  dropout_rate : float = .2,
                  norm_type : str = 'layer_norm',
                  shift_tokens : bool = False,
-                 use_rotary_embs : bool = False,
+                 use_rope : bool = False,
                  laplace_attn_fn : bool = False,
                  **kwargs):
         super().__init__(**kwargs)
@@ -403,7 +403,7 @@ class GAUTransformer(Model):
                 dropout_rate = dropout_rate,
                 norm_type = norm_type,
                 shift_tokens = shift_tokens,
-                use_rotary_embs = use_rotary_embs,
+                use_rope = use_rope,
                 laplace_attn_fn = laplace_attn_fn,
                 name = f'gau{i}'
             ) for i in range(depth)], name = 'blocks')
