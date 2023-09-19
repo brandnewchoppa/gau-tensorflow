@@ -4,13 +4,11 @@ Gated Attention Unit (TensorFlow implementation) from the paper [Transformer Qua
 ## Roadmap
 - [x] GAU module, Transformer Model
 - [x] AutoregressiveWrapper (top_p, top_k)
-- [x] Non-Causal GAU functionality
 - [x] Rotary Embeddings
 - [ ] ScaleNorm + FixNorm experiment from the [paper](https://arxiv.org/pdf/1910.05895.pdf)
-- [x] Gradient Checkpointing (with tf.recompute_grad)
-- [x] Add RMSNorm
 - [ ] Extend inference with tokenizer and __call__(str) method to directly call the text
 - [ ] Implement custom 'pre_train_step' and 'legacy_train_step' for compatibility with model.fit
+- [ ] 'gau_tensorflow_slim.py' using tf-slim to further optimise the model
 
 > [!WARNING]
 > This repository is under developemnt, so expect changes regulary but please feel free to explore and provide any feedback or suggestions you may have. :construction:
