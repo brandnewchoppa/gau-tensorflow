@@ -7,7 +7,7 @@ Gated Attention Unit (TensorFlow implementation) from the paper [Transformer Qua
 - [x] Rotary Embeddings
 - [ ] ScaleNorm + FixNorm experiment from the [paper](https://arxiv.org/pdf/1910.05895.pdf)
 - [ ] Extend inference with tokenizer and __call__(str) method to directly call the text
-- [ ] Implement custom 'pre_train_step' and 'legacy_train_step' for compatibility with model.fit
+- [ ] Implement custom 'pre_train_step' and 'legacy_train_step' for compatibility with model.fit (LegacyModel)
 - [ ] 'gau_tensorflow_slim.py' using tf-slim to further optimise the model
 
 > [!WARNING]
