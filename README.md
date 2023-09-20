@@ -63,6 +63,6 @@ for i in range(model.depth):
     author  = {Toan Q. Nguyen and Julian Salazar},
     journal = {ArXiv},
     year    = {2019},
-    volume  = {abs/2019.05895}
+    volume  = {abs/1910.05895}
 }
 ```
