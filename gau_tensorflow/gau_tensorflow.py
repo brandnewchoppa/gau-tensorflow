@@ -226,6 +226,22 @@ class RelativePositionBias(Layer):
         })
         return config
 
+class ReLUSquared(Layer):
+    """
+    ReLU Squared (ReLUSquared)
+    https://arxiv.org/pdf/2104.07012.pdf
+
+    They introduce a novel, simple method for achieving sparsity in attention, by
+    replacing the softmax activation with ReLU, and show that sparsity naturally
+    emerges from such a formulation.
+    """
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def call(self, x):
+        return math.square(tf.nn.relu(x))
+
 class LaplacianAttnFn(Layer):
     """
     Laplacian Attention Function (LaplacianAttnFn)
@@ -340,7 +356,7 @@ class GAU(Layer):
         if self.laplace_attn_fn:
             self.attn_fn = LaplacianAttnFn()
         else:
-            self.attn_fn = lambda x : tf.math.square(tf.nn.relu(x))
+            self.attn_fn = ReLUSquared()
 
         self.built = True
 
@@ -390,7 +406,7 @@ class GAU(Layer):
 
             'to_uv': serialize_keras_object(self.to_uv),
             'to_qk': serialize_keras_object(self.to_qk),
-            'scale_offset': serialize_keras_object(self.offset_scale),
+            'scale_offset': serialize_keras_object(self.scale_offset),
             'rotary_pos_embs': serialize_keras_object(self.rotary_pos_embs),
             'rel_pos_bias': serialize_keras_object(self.rel_pos_bias),
             'dropout': serialize_keras_object(self.dropout),
