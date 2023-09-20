@@ -303,7 +303,7 @@ class GAU(Layer):
                  expansion_factor : int = 2,
                  causal : bool = False,
                  dropout_rate : float = .2,
-                 norm_type : str = 'scale_norm',
+                 norm_type : str = 'layer_norm',
                  shift_tokens : bool = False,
                  use_rope : bool = False,
                  laplace_attn_fn : bool = False,
