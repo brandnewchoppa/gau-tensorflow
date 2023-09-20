@@ -15,7 +15,7 @@ from keras.layers import (
 )
 
 class ScaleNorm(Layer):
-    """
+    '''
     Scale Normalization (ScaleNorm)
     https://arxiv.org/pdf/2202.10447.pdf
 
@@ -29,7 +29,7 @@ class ScaleNorm(Layer):
     References:
     https://arxiv.org/pdf/1910.05895.pdf
     https://arxiv.org/pdf/1607.06450.pdf
-    """
+    '''
 
     def __init__(self,
                  *,
@@ -60,7 +60,7 @@ class ScaleNorm(Layer):
         return config
 
 class RMSNorm(Layer):
-    """
+    '''
     Root Mean Square Layer Normalization (RMSNorm)
     https://arxiv.org/pdf/1910.07467.pdf
 
@@ -72,7 +72,7 @@ class RMSNorm(Layer):
     Intuitively, RMSNorm simplifies LayerNorm by totally removing the
     mean statistic at the cost of sacrificing the invariance that mean
     normalization affords.
-    """
+    '''
 
     def __init__(self,
                  *,
@@ -105,7 +105,7 @@ class RMSNorm(Layer):
         return self.scale * x * tf.math.rsqrt(ms + self.eps) + self.offset
 
 class OffsetScale(Layer):
-    """
+    '''
     Offset Scale (OffsetScale)
     https://arxiv.org/pdf/2202.10447.pdf
 
@@ -118,7 +118,7 @@ class OffsetScale(Layer):
     References:
     https://arxiv.org/pdf/1706.03762.pdf (based on query, key)
     https://github.com/lucidrains/FLASH-pytorch (implementation logic)
-    """
+    '''
 
     def __init__(self,
                  *,
