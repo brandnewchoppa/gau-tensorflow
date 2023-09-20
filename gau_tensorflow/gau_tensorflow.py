@@ -15,7 +15,7 @@ from keras.layers import (
 )
 
 class ScaleNorm(Layer):
-    '''
+    """
     Scale Normalization (ScaleNorm)
     https://arxiv.org/pdf/2202.10447.pdf
 
@@ -29,7 +29,7 @@ class ScaleNorm(Layer):
     References:
     https://arxiv.org/pdf/1910.05895.pdf
     https://arxiv.org/pdf/1607.06450.pdf
-    '''
+    """
 
     def __init__(self,
                  *,
@@ -60,7 +60,7 @@ class ScaleNorm(Layer):
         return config
 
 class RMSNorm(Layer):
-    '''
+    """
     Root Mean Square Layer Normalization (RMSNorm)
     https://arxiv.org/pdf/1910.07467.pdf
 
@@ -72,7 +72,7 @@ class RMSNorm(Layer):
     Intuitively, RMSNorm simplifies LayerNorm by totally removing the
     mean statistic at the cost of sacrificing the invariance that mean
     normalization affords.
-    '''
+    """
 
     def __init__(self,
                  *,
@@ -105,7 +105,7 @@ class RMSNorm(Layer):
         return self.scale * x * tf.math.rsqrt(ms + self.eps) + self.offset
 
 class OffsetScale(Layer):
-    '''
+    """
     Offset Scale (OffsetScale)
     https://arxiv.org/pdf/2202.10447.pdf
 
@@ -118,7 +118,7 @@ class OffsetScale(Layer):
     References:
     https://arxiv.org/pdf/1706.03762.pdf (based on query, key)
     https://github.com/lucidrains/FLASH-pytorch (implementation logic)
-    '''
+    """
 
     def __init__(self,
                  *,
@@ -201,16 +201,17 @@ class RelativePositionBias(Layer):
         return bias * self.scale
 
 class LaplacianAttnFn(Layer):
-    '''
+    """
     Laplacian Attention Function (LaplacianAttnFn)
     https://arxiv.org/abs/2209.10655
 
     Replacement for Squared ReLU via architecture search techniques which has
     shown faster convergence speed and competitive generalization performance
     on language tasks.
-    '''
+    """
 
     def __init__(self,
+                 *,
                  use_n : bool = True,
                  **kwargs):
         super().__init__(**kwargs)
@@ -231,7 +232,7 @@ class LaplacianAttnFn(Layer):
         return 0.5 * (1 + math.erf(inner))
 
 class GAU(Layer):
-    '''
+    """
     Gated Attention Unit (GAU)
     https://arxiv.org/pdf/2202.10447.pdf
 
@@ -246,7 +247,7 @@ class GAU(Layer):
 
     References:
     https://github.com/lucidrains/FLASH-pytorch (implementation logic)
-    '''
+    """
 
     def __init__(self,
                  *,
@@ -353,8 +354,8 @@ class ScaledSin(Layer):
     https://github.com/lucidrains/FLASH-pytorch (implementation logic)
     """
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
     def build(self, x_shape):
         d = x_shape[-1]
@@ -393,7 +394,7 @@ class GAUTransformer(Model):
         self.depth = depth
                      
         self.token_emb = Embedding(n_tokens, emb_dim, name = 'embeddings')
-        self.abs_pos_emb = ScaledSin()
+        self.abs_pos_emb = ScaledSin(name = 'scaled_sin')
 
         self.blocks = Sequential([
             GAU(
