@@ -34,11 +34,9 @@ class ScaleNorm(Layer):
     def __init__(self,
                  *,
                  eps : float = 1e-5,
-                 scale_by_dim : bool = False,
                  **kwargs):
         super().__init__(**kwargs)
         self.eps = eps
-        self.scale_by_dim = scale_by_dim
 
     def build(self, _):
 
@@ -51,13 +49,15 @@ class ScaleNorm(Layer):
 
     def call(self, x):
         norm = tf.norm(x, axis = -1, keepdims = True)
-
-        if self.scale_by_dim:
-            norm = norm * (x.shape[-1] ** -.5)
-
+        norm = norm * (x.shape[-1] ** -.5)
         norm = tf.clip_by_value(x, self.eps, norm.dtype.max)
         norm = self.scale / norm
         return x * norm
+
+    def get_config(self):
+        config = super().get_config()
+        config.update({'eps': self.eps})
+        return config
 
 class RMSNorm(Layer):
     """
