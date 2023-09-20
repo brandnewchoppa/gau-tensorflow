@@ -19,8 +19,15 @@ The key idea is to formulate attention and GLU (Gated Linear Unit) as a unified 
 > This repository is under developemnt, so expect changes regulary but please feel free to explore and provide any feedback or suggestions you may have. :construction:
 
 ## Install
+Install through `pip`
 ```shell
 !pip install git+https://github.com/brandnewchoppa/gau-tensorflow.git
+```
+Clone to colab with `git`
+```shell
+!git clone https://github.com/brandnewchoppa/gau-tensorflow.git
+!mv /content/gau-tensorflow/gau_tensorflow .
+!rm -rf gau-tensorflow
 ```
 
 ## Usage
