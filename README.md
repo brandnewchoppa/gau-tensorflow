@@ -5,6 +5,8 @@ They presented a simpler and more efficient architecture than the Vanilla Transf
 
 The key idea is to **formulate attention and GLU** (Gated Linear Unit) as a unified layer to share their computation as much as possible. This not only results in higher param/compute efficiency, but also natu- rally enables a powerful attentive gating mechanism. (Section 2.)
 
+![Gated Attention Unit](./gau-figure.png)
+
 ## Roadmap
 - [x] GAU module, Transformer Model
 - [x] AutoregressiveWrapper (top_p, top_k)
