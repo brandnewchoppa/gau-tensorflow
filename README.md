@@ -27,9 +27,9 @@ The key idea is to formulate attention and GLU (Gated Linear Unit) as a unified 
 
 ```python
 import tensorflow as tf
-from gau_tensorflow import Transformer
+from gau_tensorflow import GAUTransformer
 
-model = Transformer(
+model = GAUTransformer(
     emb_dim = 128,            # embedding dimension
     n_tokens = 50257,         # number of tokens used in the vocabulary
     depth = 4,                # number of blocks stacked in the model
