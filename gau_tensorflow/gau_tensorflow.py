@@ -6,6 +6,11 @@ from tensorflow import math
 
 from keras import Model, Sequential
 from keras.layers import Layer
+from keras.saving import (
+    serialize_keras_object,
+    deserialize_keras_object,
+    register_keras_serializable
+)
 
 from keras.layers import (
     Dense,
@@ -77,12 +82,10 @@ class RMSNorm(Layer):
     def __init__(self,
                  *,
                  eps : float = 1e-8,
-                 p : float = -1.0,
                  use_bias : bool = False,
                  **kwargs):
         super().__init__(**kwargs)
         self.eps = eps
-        self.p = p
         self.use_bias = use_bias
 
     def build(self, x_shape):
@@ -103,6 +106,14 @@ class RMSNorm(Layer):
     def call(self, x):
         ms = tf.reduce_mean(tf.math.square(x), axis = -1, keepdims = True)
         return self.scale * x * tf.math.rsqrt(ms + self.eps) + self.offset
+
+    def get_config(self):
+        config = super().get_config()
+        config.update({
+            'eps': self.eps,
+            'use_bias': self.use_bias
+        })
+        return config
 
 class OffsetScale(Layer):
     """
@@ -145,6 +156,11 @@ class OffsetScale(Layer):
     def call(self, x):
         out = einsum('...e, se -> ...se', x, self.gamma) + self.beta
         return tf.unstack(out, axis = -2)
+
+    def get_config(self):
+        config = super().get_config()
+        config.update({'splits': self.splits})
+        return config
     
 class RelativePositionBias(Layer):
     """
@@ -200,6 +216,16 @@ class RelativePositionBias(Layer):
         bias = reshape(values, values.shape[:-1])
         return bias * self.scale
 
+    def get_config(self):
+        config = super().get_config()
+        config.update({
+            'scale': self.scale,
+            'n_buckets': self.n_buckets,
+            'max_distance': self.max_distance,
+            'relative_attention_bias': self.relative_attention_bias
+        })
+        return config
+
 class LaplacianAttnFn(Layer):
     """
     Laplacian Attention Function (LaplacianAttnFn)
@@ -231,6 +257,12 @@ class LaplacianAttnFn(Layer):
         inner = (x - mu) / (std * tf.cast(math.sqrt(n), x.dtype))
         return 0.5 * (1 + math.erf(inner))
 
+    def get_config(self):
+        config = super().get_config()
+        config.update({'use_n': self.use_n})
+        return config
+
+@register_keras_serializable(package = 'GAUTensorFlow')
 class GAU(Layer):
     """
     Gated Attention Unit (GAU)
@@ -343,6 +375,41 @@ class GAU(Layer):
         u, v = tf.split(self.to_uv(x), 2, axis = -1)
         x = u * self.dropout(self._attn(x, v))
         return self.to_out(x) + shortcut
+
+    def get_config(self):
+        config = super().get_config()
+        config.update({
+            'qk_dim': self.qk_dim,
+            'expansion_factor': self.expansion_factor,
+            'causal': self.causal,
+            'dropout_rate': self.dropout_rate,
+            'norm_type': self.norm_type,
+            'shift_tokens': self.shift_tokens,
+            'use_rope': self.use_rope,
+            'laplace_attn_fn': self.laplace_attn_fn,
+
+            'to_uv': serialize_keras_object(self.to_uv),
+            'to_qk': serialize_keras_object(self.to_qk),
+            'scale_offset': serialize_keras_object(self.offset_scale),
+            'rotary_pos_embs': serialize_keras_object(self.rotary_pos_embs),
+            'rel_pos_bias': serialize_keras_object(self.rel_pos_bias),
+            'dropout': serialize_keras_object(self.dropout),
+            'to_out': serialize_keras_object(self.to_out),
+            'attn_fn': serialize_keras_object(self.attn_fn)
+        })
+        return config
+
+    @classmethod
+    def from_config(cls, config):
+        config['to_uv'] = deserialize_keras_object(config['to_uv'])
+        config['to_qk'] = deserialize_keras_object(config['to_qk'])
+        config['scale_offset'] = deserialize_keras_object(config['scale_offset'])
+        config['rotary_pos_embs'] = deserialize_keras_object(config['rotary_pos_embs'])
+        config['rel_pos_bias'] = deserialize_keras_object(config['rel_pos_bias'])
+        config['dropout'] = deserialize_keras_object(config['dropuot'])
+        config['to_out'] = deserialize_keras_object(config['to_out'])
+        config['attn_fn'] = deserialize_keras_object(config['attn_fn'])
+        return cls(**config)
     
 class ScaledSin(Layer):
     """
