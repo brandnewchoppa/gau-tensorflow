@@ -201,12 +201,12 @@ class RelativePositionBias(Layer):
 
         val_if_large = max_exact + cast(
             math.log(cast(n, tf.float32) / max_exact) / math.log(max_distance / max_exact) * (n_buckets - max_exact),
-            'int64')
+            tf.int32)
         val_if_large = math.minimum(val_if_large, cast(tf.fill(val_if_large.shape, n_buckets - 1), tf.int32))
 
-        return tf.where(is_small, cast(n, 'int64'), val_if_large)
+        return tf.where(is_small, cast(n, tf.int32), val_if_large)
 
-    def forward(self, x):
+    def call(self, x):
         i, j = x.shape[-2:]
         q_pos = tf.range(i, dtype = tf.int32)
         k_pos = tf.range(j, dtype = tf.int32)
