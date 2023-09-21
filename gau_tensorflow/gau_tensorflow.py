@@ -361,7 +361,6 @@ class GAU(Layer):
 
         self.built = True
 
-    @tf.recompute_grad
     def _attn(self, x, v):
         n = cast(x.shape[-2], x.dtype)
         z = self.to_qk(x)
