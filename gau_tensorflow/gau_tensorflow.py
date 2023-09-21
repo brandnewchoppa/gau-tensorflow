@@ -511,3 +511,4 @@ class GAUTransformer(Model):
             'use_rope': self.use_rope,
             'laplace_attn_fn': self.laplace_attn_fn
         })
+        return config
