@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name = 'gau-tensorflow',
     packages = find_packages(exclude = []),
-    version = '0.1.0',
+    version = '0.1.3',
     license = 'MIT',
     description = 'GAU - Transformer Quality in Linear Time - TensorFlow',
     author = 'brandnewchoppa',
