@@ -80,3 +80,13 @@ for i in range(model.depth):
     volume  = {abs/1910.05895}
 }
 ```
+
+```bibtex
+@article{Xuezhe2023MEGA,
+    title   = {Transformers without Tears: Improving the Normalization of Self-Attention},
+    author  = {Xuezhe Ma and Chunting Zhou and Xiang Kong and Junxian He and Liangke Gui and Graham Neubig and Jonathan May and Luke Zettlemoyer},
+    journal = {ArXiv},
+    year    = {2023},
+    volume  = {abs/2209.10655}
+}
+```
