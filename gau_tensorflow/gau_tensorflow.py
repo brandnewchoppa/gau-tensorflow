@@ -221,7 +221,8 @@ class RelativePositionBias(Layer):
         config.update({
             'scale': self.scale,
             'n_buckets': self.n_buckets,
-            'max_distance': self.max_distance
+            'max_distance': self.max_distance,
+            'relative_attention_bias': self.relative_attention_bias
         })
         return config
 
