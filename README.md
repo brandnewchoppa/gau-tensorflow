@@ -15,7 +15,6 @@ The key idea is to **formulate attention and GLU** (Gated Linear Unit) as a unif
 - [ ] Extend inference with tokenizer and __call__(str) method to directly call the text
 - [ ] Implement custom 'pre_train_step' and 'legacy_train_step' for compatibility with model.fit (LegacyModel)
 - [ ] 'gau_tensorflow_slim.py' using tf-slim to further optimise the model
-- [ ] citation for laplace attn fn
 
 > [!WARNING]
 > This repository is under developemnt, so expect changes regulary but please feel free to explore and provide any feedback or suggestions you may have. :construction:
