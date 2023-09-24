@@ -178,6 +178,7 @@ class RelativePositionBias(Layer):
     def __init__(self,
                  *,
                  scale : float,
+                 causal : bool = False,
                  n_buckets : int = 32,
                  max_distance : int = 128,
                  **kwargs):
@@ -216,7 +217,7 @@ class RelativePositionBias(Layer):
         q_pos = tf.range(i, dtype = tf.int32)
         k_pos = tf.range(j, dtype = tf.int32)
         rel_pos = reshape(k_pos, [1] + k_pos.shape) - reshape(q_pos, q_pos.shape + [1])
-        rp_bucket = self._relative_position_bucket(rel_pos, self.n_buckets, self.max_distance)
+        rp_bucket = self._relative_position_bucket(rel_pos, self.causal, self.n_buckets, self.max_distance)
         values = self.relative_attention_bias(rp_bucket)
         bias = reshape(values, values.shape[:-1])
         return bias * self.scale
@@ -225,6 +226,7 @@ class RelativePositionBias(Layer):
         config = super().get_config()
         config.update({
             'scale': self.scale,
+            'causal': self.causal,
             'n_buckets': self.n_buckets,
             'max_distance': self.max_distance,
             'relative_attention_bias': self.relative_attention_bias
