@@ -184,6 +184,7 @@ class RelativePositionBias(Layer):
                  **kwargs):
         super().__init__(**kwargs)
         self.scale = scale
+        self.causal = causal
         self.n_buckets = n_buckets
         self.max_distance = max_distance
         self.relative_attention_bias = Embedding(n_buckets, 1)
