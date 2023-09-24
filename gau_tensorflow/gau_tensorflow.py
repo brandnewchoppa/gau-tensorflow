@@ -190,11 +190,16 @@ class RelativePositionBias(Layer):
     @staticmethod
     def _relative_position_bucket(
         relative_position,
+        causal = False,
         n_buckets = 32,
         max_distance = 128):
 
         n = -relative_position
-        n = math.maximum(n, tf.zeros_like(n))
+        if causal:
+            n_buckets //= 2
+            n = tf.math.abs(tf.cast(n < 0, n.dtype) * n_buckets)
+        else:
+            n = math.maximum(n, tf.zeros_like(n))
 
         max_exact = n_buckets // 2
         is_small = n < max_exact
