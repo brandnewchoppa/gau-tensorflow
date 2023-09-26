@@ -3,7 +3,7 @@ Gated Attention Unit (TensorFlow implementation) from the paper [Transformer Qua
 
 They presented a simpler and more efficient architecture than the Vanilla Transformer. It also suffers from quadratic complexity over the context length, but the authors claim it can replace the Multi-Headed Attention with reducing the number of heads to just a single one.
 
-The key idea is to **formulate attention and GLU** (Gated Linear Unit) as a unified layer to share their computation as much as possible. This not only results in higher param/compute efficiency, but also natu- rally enables a powerful attentive gating mechanism. (Section 2.)
+The key idea is to **formulate attention and GLU** (Gated Linear Unit) as a unified layer to share their computation as much as possible. This not only results in higher param/compute efficiency, but also naturally enables a powerful attentive gating mechanism. (Section 2.)
 
 ![Gated Attention Unit](./gau-figure.png)
 
