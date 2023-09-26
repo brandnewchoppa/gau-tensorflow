@@ -400,7 +400,7 @@ class GAU(Layer):
 
         u, v = tf.split(self.to_uv(x), 2, axis = -1)
         x = u * self.dropout(self._attn(x, v))
-        return self.to_out(x) + shortcut
+        return self.to_out(x) + tf.saturate_cast(shortcut, x.dtype)
 
     def get_config(self):
         config = super().get_config()
