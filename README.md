@@ -49,6 +49,26 @@ x = tf.random.uniform([1, 512], 0, 50257, tf.int64)
 logits = model(x, training = False)
 ```
 
+### Gated Attention Unit
+
+```python
+import tensorflow as tf
+from gau_tensorflow import GAU
+
+model = GAU(
+    qk_duim = 64,             # embedding dimension
+    expansion_factor = 2,     # number of tokens used in the vocabulary
+    causal = True,            # autoregressive functionality
+    norm_type = 'layer_norm'  # normalisation type (layer_norm, scale_norm, rms_norm)
+    shift_tokens = False,     # extra for autoregressive functionality
+    use_rope = True,          # rotary position embeddings
+    laplace_attn_fn = True    # laplacian attention function
+)
+
+x = tf.random.normal([1, 512])
+z = model(x, training = False)
+```
+
 ### Interpolate Sequence Positions
 
 ```python
