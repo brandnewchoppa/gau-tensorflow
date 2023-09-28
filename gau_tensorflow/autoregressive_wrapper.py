@@ -55,16 +55,16 @@ class AutoregressiveWrapper(Model):
                  max_tokens : int = 1024):
         input_ids = self.tokenizer(input_text)
         input_ids = tf.constant([input_ids['input_ids']])
-        out = self._generate_legacy(input_ids,
-                                    max_new_tokens = max_new_tokens,
-                                    eos_token = eos_token,
-                                    temperature = temperature,
-                                    top_k = top_k,
-                                    top_p = top_p,
-                                    max_tokens = max_tokens)
+        out = self.__generate__(input_ids,
+                                max_new_tokens = max_new_tokens,
+                                eos_token = eos_token,
+                                temperature = temperature,
+                                top_k = top_k,
+                                top_p = top_p,
+                                max_tokens = max_tokens)
         return self.tokenizer.decode(out[0])
     
-    def _generate_legacy(self,
+    def __generate__(self,
                  input_ids : tf.Tensor,
                  max_new_tokens : int,
                  eos_token = None,
