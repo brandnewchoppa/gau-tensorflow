@@ -16,7 +16,7 @@ The key idea is to **formulate attention and GLU** (Gated Linear Unit) as a unif
 - [ ] Implement custom 'pre_train_step' and 'legacy_train_step' for compatibility with model.fit (LegacyModel)
 
 > [!WARNING]
-> This repository is under developemnt, so expect changes regulary but please feel free to explore and provide any feedback or suggestions you may have. :construction:
+> This repository is under development, so expect changes regulary but please feel free to explore and provide any feedback or suggestions you may have. :construction:
 
 ## Install
 Install through `pip`
