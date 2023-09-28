@@ -56,8 +56,8 @@ import tensorflow as tf
 from gau_tensorflow import GAU
 
 model = GAU(
-    qk_duim = 64,             # embedding dimension
-    expansion_factor = 2,     # number of tokens used in the vocabulary
+    qk_duim = 64,             # query/key dimension
+    expansion_factor = 2,     # feed forward multiplier
     causal = True,            # autoregressive functionality
     norm_type = 'layer_norm', # normalisation type (layer_norm, scale_norm, rms_norm)
     shift_tokens = False,     # extra for autoregressive functionality
