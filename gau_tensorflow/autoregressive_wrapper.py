@@ -1,6 +1,7 @@
 import tensorflow as tf
 
 from keras import Model
+from keras.saving import register_keras_serializable
 
 def top_k_fn(logits, k = 0):
     '''
