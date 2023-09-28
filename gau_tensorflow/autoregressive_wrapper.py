@@ -35,14 +35,36 @@ def top_p_fn(logits, p = .9):
     ], axis = -1)
     return tf.where(sorted_indices_to_remove, tf.fill(logits.shape, float('-inf')), sorted_logits)
 
+@register_keras_serializable(package = 'GAUTensorFlow')
 class AutoregressiveWrapper(Model):
     def __init__(self,
                  model,
+                 tokenizer,
                  **kwargs):
         super().__init__(**kwargs)
         self.model = model
+        self.tokenizer = tokenizer
 
     def generate(self,
+                 input_text,
+                 max_new_tokens : int,
+                 eos_token = None,
+                 temperature : float = 1.0,
+                 top_k : int = 50,
+                 top_p : float = 1.0,
+                 max_tokens : int = 1024):
+        input_ids = self.tokenizer(input_text)
+        input_ids = tf.constant([input_ids['input_ids']])
+        out = self._generate_legacy(input_ids,
+                                    max_new_tokens = max_new_tokens,
+                                    eos_token = eos_token,
+                                    temperature = temperature,
+                                    top_k = top_k,
+                                    top_p = top_p,
+                                    max_tokens = max_tokens)
+        return self.tokenizer.decode(out[0])
+    
+    def _generate_legacy(self,
                  input_ids : tf.Tensor,
                  max_new_tokens : int,
                  eos_token = None,
